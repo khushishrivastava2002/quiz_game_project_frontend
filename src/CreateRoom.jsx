@@ -10,26 +10,27 @@ const CreateRoom = ({ onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(''); // Clear any previous error messages
+    setError('');
 
-    // Check if adminName is provided
     if (!adminName.trim()) {
-      setError('Admin Name is required.'); // Display error if adminName is empty
+      setError('Admin Name is required.');
       return;
     }
 
     try {
-      const roomData = await createRoom(adminName); // Call createRoom from api.jsx
+      const roomData = await createRoom(adminName);
       console.log('Room created:', roomData);
-      navigate('/question-game', { state: { roomCode: roomData.room_code } });
-      onClose(); // Close the modal after room creation
+      
+      // Pass roomCode and adminName when navigating to QuestionGame
+      navigate('/question-game', { state: { roomCode: roomData.room_code, adminName } });
+      onClose();
     } catch (error) {
       setError('Error creating room. Please try again.');
     }
   };
 
   const handleLetsGoClick = (event) => {
-    handleSubmit(event); // Call handleSubmit when the button is clicked
+    handleSubmit(event);
   };
 
   return (
@@ -50,7 +51,7 @@ const CreateRoom = ({ onClose }) => {
             onChange={(e) => setAdminName(e.target.value)}
             required
           />
-          {error && <div className="error">{error}</div>} {/* Display error message */}
+          {error && <div className="error">{error}</div>}
           <button 
             type="button"
             className="button-confirm"
