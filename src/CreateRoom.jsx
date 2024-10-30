@@ -10,7 +10,7 @@ const CreateRoom = ({ onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
+    setError('');   
 
     if (!adminName.trim()) {
       setError('Admin Name is required.');

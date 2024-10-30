@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import { logoutUser } from './api'; // Import the logout API call function
 import CreateRoom from './CreateRoom'; // Import CreateRoom component
+import JoinRoom from './JoinRoom';
+
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleJoinRoom = () => navigate('/join-room');
-
+  const [isModalOpene, setIsModalOpene] = useState(false);
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -23,13 +23,16 @@ const Navbar = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+  const toggleModale = () => {
+    setIsModalOpene(!isModalOpene);
+  };
 
   return (
     <>
       {/* Navbar */}
       <AppBar
         position="static"
-        sx={{ background: 'linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100%)' }}
+        sx={{ background: 'linear-gradient(-45deg, #514644 0%, #efc8b1 100%)' }}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" component="div">
@@ -95,7 +98,7 @@ const Navbar = () => {
               <p className="card__description">
                 This allows you to join an existing room created by someone else.
               </p>
-              <Button color="inherit" onClick={handleJoinRoom}>
+              <Button color="inherit" onClick={toggleModale}>
                 Join Room
               </Button>
             </div>
@@ -106,6 +109,9 @@ const Navbar = () => {
       {/* Modal for Create Room */}
       {isModalOpen && (
         <CreateRoom onClose={toggleModal} />
+      )}
+      {isModalOpene && (
+        <JoinRoom onClose={toggleModale} />
       )}
     </>
   );
