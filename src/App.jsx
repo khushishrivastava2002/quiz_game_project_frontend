@@ -5,6 +5,7 @@ import SignIn from './SignIn';
 import Dashboard from './Dasboard';
 import CreateRoom from './CreateRoom';
 import QuestionGame from './QuestionGame';
+import JoinRoom from './JoinRoom';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/create-room" element={<CreateRoom/>}/>
+        <Route path="/join-room" element={<JoinRoom/>}/>
         <Route path="/question-game" element={<QuestionGame />} />
         
       </Routes>

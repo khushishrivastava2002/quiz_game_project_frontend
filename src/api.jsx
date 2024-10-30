@@ -1,5 +1,6 @@
 // api.jsx
 import axios from 'axios';
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 // Set base URL for backend API
 const api = axios.create({
@@ -61,3 +62,20 @@ export const createRoom = async (adminName) => {
     throw error;
   }
 };
+
+export const joinRoom = async (roomCode, userName) => {
+  console.log(roomCode);
+  console.log(userName);
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/rooms/join_room?room_code=${encodeURIComponent(roomCode)}&user_name=${encodeURIComponent(userName)}`,
+      {}  // Sending an empty object as the body
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Room join failed:', error.response?.data?.detail || error.message);
+    throw error;
+  }
+};
+
+
