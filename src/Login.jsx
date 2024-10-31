@@ -11,8 +11,8 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const userData = {email, password };
-      const result = await loginUser (userData);
+      const userData = { email, password };
+      const result = await loginUser(userData);
       console.log("Login successful:", result);
       navigate('/dashboard');
     } catch (error) {
@@ -74,15 +74,20 @@ const LoginPage = () => {
           <Button
             fullWidth
             variant="contained"
-            color="warning"
-            sx={{ mt: 1, mb: 2 }}
+            sx={{
+              mt: 1,
+              mb: 2,
+              backgroundColor: '#514644', // Set the background color
+              color: '#ffffff', // Change text color to white for contrast
+              '&:hover': {
+                backgroundColor: '#6b5b5b', // Optional: Change color on hover
+              },
+            }}
             onClick={handleLogin}
           >
             Log In
           </Button>
-          <Link href="#" variant="body2">
-            Forgot Your Password?
-          </Link>
+           
         </Box>
       </Grid>
 

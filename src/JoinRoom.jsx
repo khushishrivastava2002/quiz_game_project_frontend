@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { joinRoom } from './api'; // Importing joinRoom from api.js
+// JoinRoom.jsx
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { joinRoom } from './api';
 import './CreateRoom.css';
 
 const JoinRoom = ({ onClose }) => {
@@ -8,12 +9,15 @@ const JoinRoom = ({ onClose }) => {
   const [roomCode, setRoomCode] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Extracting the adminName from location state
+  const adminName = location.state?.adminName || '';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
 
-    // Check if both fields are provided
     if (!username.trim()) {
       setError('Username is required.');
       return;
@@ -24,11 +28,11 @@ const JoinRoom = ({ onClose }) => {
     }
 
     try {
-      const joinData = await joinRoom(roomCode, username); // Pass roomCode and username
+      const joinData = await joinRoom(roomCode, username);
       console.log('Room joined:', joinData);
 
-      // Navigate to the join room page and pass username and roomCode
-      navigate('/question-game', { state: { roomCode, username } });
+      // Pass roomCode, username, adminName, and isHost flag (false for participants) when navigating to QuestionGame
+      navigate('/question-game', { state: { roomCode, username, adminName, isHost: false } });
       onClose();
     } catch (error) {
       setError(error.response?.data?.detail || 'Error joining room. Please check the room code and try again.');
@@ -62,8 +66,9 @@ const JoinRoom = ({ onClose }) => {
             onChange={(e) => setRoomCode(e.target.value)}
             required
           />
+          {adminName && <div className="admin-name">Admin Name: {adminName}</div>} {/* Display admin name */}
           {error && <div className="error">{error}</div>}
-          <button type="submit" className="button-confirm">Join Room →</button> {/* Change to type="submit" */}
+          <button type="submit" className="button-confirm">Join Room →</button>
         </form>
       </div>
     </div>

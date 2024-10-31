@@ -79,10 +79,17 @@ const SignInPage = () => {
             <Typography variant="body2">Remember Me</Typography>
           </Box>
           <Button
-            fullWidth
-            variant="contained"
-            color="warning"
-            sx={{ mt: 1, mb: 2 }}
+           fullWidth
+           variant="contained"
+           sx={{
+             mt: 1,
+             mb: 2,
+             backgroundColor: '#514644', // Set the background color
+             color: '#ffffff', // Change text color to white for contrast
+             '&:hover': {
+               backgroundColor: '#6b5b5b', // Optional: Change color on hover
+             },
+           }}
             onClick={handleSignIn}
           >
             Sign In

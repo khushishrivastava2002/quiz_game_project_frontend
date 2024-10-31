@@ -1,3 +1,4 @@
+// CreateRoom.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createRoom } from './api';
@@ -20,17 +21,13 @@ const CreateRoom = ({ onClose }) => {
     try {
       const roomData = await createRoom(adminName);
       console.log('Room created:', roomData);
-      
-      // Pass roomCode and adminName when navigating to QuestionGame
-      navigate('/question-game', { state: { roomCode: roomData.room_code, adminName } });
+
+      // Pass roomCode, adminName, and isHost flag when navigating to QuestionGame
+      navigate('/question-game', { state: { roomCode: roomData.room_code, adminName, isHost: true } });
       onClose();
     } catch (error) {
       setError('Error creating room. Please try again.');
     }
-  };
-
-  const handleLetsGoClick = (event) => {
-    handleSubmit(event);
   };
 
   return (
@@ -55,7 +52,7 @@ const CreateRoom = ({ onClose }) => {
           <button 
             type="button"
             className="button-confirm"
-            onClick={handleLetsGoClick}
+            onClick={handleSubmit}
           >
             Let’s go →
           </button>

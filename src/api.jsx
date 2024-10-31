@@ -79,3 +79,27 @@ export const joinRoom = async (roomCode, userName) => {
 };
 
 
+export const endRoom = async (adminName, roomCode) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/rooms/end_room`, null, { 
+      params: {
+        admin_name: adminName,
+        room_code: roomCode,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.detail || 'Failed to end the room');
+  }
+};
+
+
+export const fetchRoomDetails = async (roomCode) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/rooms/room_details/${roomCode}`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch room details:', error.message);
+    throw error; // Rethrow the error for handling in the component
+  }
+};
