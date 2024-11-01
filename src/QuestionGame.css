@@ -1,45 +1,120 @@
+/* Main container to center the card */
 .question-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #efc8b1;
   position: relative;
-  padding: 20px;
-  background-color: #f9f9f9; /* Optional background color */
 }
 
+/* "End Game" button styling for top-right position */
+.button-end-top-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #efc8b1;
+  background-color: #514644;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-end-top-right:hover {
+  background-color: #3d3636;
+}
+
+/* Card styling */
+.cardque {
+  width: 700px;
+  padding: 100px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #514644;
+  font-family: Arial, sans-serif;
+}
+
+/* Room information section */
 .room-info {
   margin-bottom: 20px;
 }
 
-.room-code {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: #fff; /* Optional background for visibility */
-  padding: 10px;
-  border: 1px solid #ddd; /* Optional border for styling */
-  border-radius: 5px; /* Optional rounded corners */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
-}
-
+/* Align admin name with players list */
 .admin-name {
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  font-size: 1.3em;
+  color: #514644;
+  padding: 10px 0;
+  font-weight: bolder;
 }
 
 .players-list {
   margin-top: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
+.players-list ul {
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+.players-list li {
+  list-style-type: disc;
+  color: #514644;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* Room code styling */
+.room-code {
+  font-weight: bold;
+  color: #514644;
+  background: #efc8b1;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: right;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  
+}
+
+/* Button styling */
 .game-buttons {
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
 }
 
-.button-start,
-.button-end {
-  margin-right: 10px;
+.button-start {
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #efc8b1;
+  background-color: #514644;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
+.button-start:hover {
+  background-color: #3d3636;
+}
+
+/* Popup styling */
 .popup {
   margin-top: 20px;
   padding: 10px;
-  background-color: #ffcc00; /* Warning background color */
-  border: 1px solid #cc9900; /* Border for popup */
-  border-radius: 5px; /* Rounded corners */
+  background-color: #ffcc00;
+  border: 1px solid #cc9900;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
 }

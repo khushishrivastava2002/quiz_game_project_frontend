@@ -17,7 +17,6 @@ function App() {
         <Route path="/create-room" element={<CreateRoom/>}/>
         <Route path="/join-room" element={<JoinRoom/>}/>
         <Route path="/question-game" element={<QuestionGame />} />
-        
       </Routes>
     </Router>
   );

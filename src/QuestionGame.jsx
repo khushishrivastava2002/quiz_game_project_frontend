@@ -16,22 +16,43 @@ const QuestionGame = () => {
   const [roomDetails, setRoomDetails] = useState(null);
 
   useEffect(() => {
+    // Fetch room details on component mount
+    const fetchDetails = async () => {
+      try {
+        const details = await fetchRoomDetails(roomCode);
+        setRoomDetails(details);
+      } catch (error) {
+        console.error('Failed to fetch room details:', error.message);
+      }
+    };
+
+    fetchDetails();
+
     // Set up WebSocket connection
     const ws = new WebSocket(`ws://localhost:8000/ws/game/${roomCode}`);
+    setWebSocket(ws);
 
     ws.onopen = () => {
       console.log('WebSocket connection established');
     };
 
-    // Listen for messages from the WebSocket
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (data.type === 'game_over') {
+      if (data.type === 'player_list_update') {
+        // Update the player list when a new player joins
+        setRoomDetails((prevDetails) => ({
+          ...prevDetails,
+          players: data.players
+        }));
+      } else if (data.type === 'start_game') {
+        // Navigate to QuestionShow when the game starts
+        navigate('/questionshow', { state: { roomCode, adminName } });
+      } else if (data.type === 'game_over') {
         setPopupMessage('The game has ended. Redirecting to dashboard...');
         setGameEnded(true);
         setTimeout(() => {
           navigate('/dashboard');
-        }, 2000); // Redirect after 2 seconds
+        }, 2000);
       }
     };
 
@@ -45,67 +66,64 @@ const QuestionGame = () => {
     };
   }, [navigate, roomCode]);
 
-  useEffect(() => {
-    // Fetch room details on component mount
-    const fetchDetails = async () => {
-      try {
-        const details = await fetchRoomDetails(roomCode);
-        setRoomDetails(details);
-      } catch (error) {
-        console.error('Failed to fetch room details:', error.message);
-      }
-    };
-
-    fetchDetails();
-  }, [roomCode]);
-
   const handleEndGame = async () => {
     try {
       await endRoom(adminName, roomCode);
-      // Notify all participants that the game has ended
       if (websocket) {
         websocket.send(JSON.stringify({ type: 'END_GAME' }));
       }
-      // Redirect the host immediately
       navigate('/dashboard');
     } catch (error) {
       console.error('Failed to end the game:', error.message);
     }
   };
 
+  const handleStartGame = () => {
+    if (websocket) {
+      websocket.send(JSON.stringify({ type: 'start_game' }));
+    }
+    navigate('/questionshow', { state: { roomCode, adminName } });
+  };
+
   return (
     <div className="question-game">
-      <div className="room-info">
-        <div className="admin-name">Admin: {adminName}</div>
-        {roomDetails && (
-          <div className="players-list">
-            Players:
-            <ul>
-              {roomDetails.players.map((player, index) => (
-                <li key={index}>{player}</li>
-              ))}
-            </ul>
+      {isHost && (
+        <button className="button-end-top-right" onClick={handleEndGame}>
+          End Game
+        </button>
+      )}
+      <div className="cardque">
+        <div className="room-info">
+          <div className="admin-name">Admin: {adminName}</div>
+          {roomDetails && (
+            <div className="players-list">
+              Players:
+              <ul>
+                {roomDetails.players.map((player, index) => (
+                  <li key={index}>{player}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="room-code">Room Code: {roomCode}</div>
+        {isHost ? (
+          <div className="game-buttons">
+            <button className="button-start" onClick={handleStartGame}>
+              Start Game
+            </button>
+          </div>
+        ) : (
+          <div className="waiting-message">
+            {gameEnded ? 'The game has ended.' : 'Waiting for host to start the game...'}
+          </div>
+        )}
+        {popupMessage && (
+          <div className="popup">
+            <p>{popupMessage}</p>
           </div>
         )}
       </div>
-      <div className="room-code">Room Code: {roomCode}</div>
-      {isHost ? (
-        <div className="game-buttons">
-          <button className="button-start">Start Game</button>
-          <button className="button-end" onClick={handleEndGame}>End Game</button>
-        </div>
-      ) : (
-        <div className="waiting-message">
-          {gameEnded ? 'The game has ended.' : 'Waiting for host to start the game...'}
-        </div>
-      )}
-
-      {/* Display popup message if game is ended */}
-      {popupMessage && (
-        <div className="popup">
-          <p>{popupMessage}</p>
-        </div>
-      )}
     </div>
   );
 };

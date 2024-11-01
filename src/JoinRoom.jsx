@@ -8,11 +8,19 @@ const JoinRoom = ({ onClose }) => {
   const [username, setUsername] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [error, setError] = useState('');
+  const [adminName, setAdminName] = useState(''); // Updated to store adminName
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  // Extracting the adminName from location state
-  const adminName = location.state?.adminName || '';
+
+  useEffect(() => {
+    const ws = new WebSocket(`ws://localhost:8000/ws/game/${roomCode}`);
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'admin_info') {
+        setAdminName(data.adminName); // Update admin name from WebSocket
+      }
+    };
+    return () => ws.close();
+  }, [roomCode]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,10 +36,7 @@ const JoinRoom = ({ onClose }) => {
     }
 
     try {
-      const joinData = await joinRoom(roomCode, username);
-      console.log('Room joined:', joinData);
-
-      // Pass roomCode, username, adminName, and isHost flag (false for participants) when navigating to QuestionGame
+      await joinRoom(roomCode, username);
       navigate('/question-game', { state: { roomCode, username, adminName, isHost: false } });
       onClose();
     } catch (error) {
